@@ -33,7 +33,7 @@ class _MyAppState extends State<MyApp> {
           create: (_) => di.sl<MobileListImagesCubit>(),
         ),
         BlocProvider<MobileFvtCubit>(
-          create: (_) => di.sl<MobileFvtCubit>()..openDatabase()..getAllFvtItems(),
+          create: (_) => di.sl<MobileFvtCubit>()..openDatabase()..getAllFvtItems(-1),
         ),
       ],
       child: MaterialApp(

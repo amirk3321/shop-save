@@ -15,6 +15,7 @@ class MobileFvtCubit extends Cubit<MobileFvtState> {
   final GetAllMobileItemsUseCase getAllMobileItemsUseCase;
   final OpenDatabaseUseCase openDatabaseUseCase;
   final UpdateFvtUseCase updateFvtUseCase;
+  int prevFilter = -1;
 
   MobileFvtCubit({
     required this.addFvtUseCase,
@@ -40,13 +41,23 @@ class MobileFvtCubit extends Cubit<MobileFvtState> {
       //FIXME:emit(failureState());
     }
   }
-  Future<void> getAllFvtItems()async{
+  Future<void> getAllFvtItems(int filter)async{
+    prevFilter = filter;
+    print("getAllFvtItems "+ filter.toString());
     emit(MobileFvtLoading());
     try{
-      final taskData=await getAllMobileItemsUseCase.call();
+      final List<MobileItemEntity> taskData=await getAllMobileItemsUseCase.call();
+
+      if (filter == 0) {
+        taskData.sort((a, b) => a.price!.compareTo(b.price!));
+      } else if (filter == 1) {
+        taskData.sort((a, b) => b.price!.compareTo(a.price!));
+      } else if (filter == 2) {
+        taskData.sort((a, b) => b.rating!.compareTo(a.rating!));
+      }
       emit(MobileFvtLoaded(taskData: taskData));
     }catch(_){
-     // print("failure");
+      // print("failure");
       emit(MobileFvtFailure());
     }
   }
@@ -65,5 +76,9 @@ class MobileFvtCubit extends Cubit<MobileFvtState> {
     }catch(_){
       //FIXME:emit(failureState());
     }
+  }
+
+  Future<void> refreshAfterAddingToFav() async {
+    getAllFvtItems(prevFilter);
   }
 }

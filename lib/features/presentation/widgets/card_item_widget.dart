@@ -23,7 +23,7 @@ class _CardItemWidgetState extends State<CardItemWidget> {
 
   @override
   void initState() {
-    BlocProvider.of<MobileFvtCubit>(context).getAllFvtItems();
+    BlocProvider.of<MobileFvtCubit>(context).getAllFvtItems(-1);
     super.initState();
   }
 
@@ -112,7 +112,11 @@ class _CardItemWidgetState extends State<CardItemWidget> {
 
                                             BlocProvider.of<MobileListCubit>(
                                                 context)
-                                                .getMobileList();
+                                                .refreshAfterAddingToFav();
+
+                                            BlocProvider.of<MobileFvtCubit>(
+                                                context)
+                                                .refreshAfterAddingToFav();
                                             setState(() {});
 
                                           },

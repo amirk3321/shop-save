@@ -10,14 +10,23 @@ part 'mobile_list_state.dart';
 
 class MobileListCubit extends Cubit<MobileListState> {
   final GetMobileListUseCase getMobileListUseCase;
+  int prevFilter = -1;
   MobileListCubit({required this.getMobileListUseCase}) : super(MobileListInitial());
 
 
-  Future<void> getMobileList()async{
+  Future<void> getMobileList(int filter)async{
+    prevFilter = filter;
     emit(MobileListLoading());
     try{
 
      final response= await getMobileListUseCase.call();
+     if (filter == 0) {
+       response.sort((a, b) => a.price!.compareTo(b.price!));
+     } else if (filter == 1) {
+       response.sort((a, b) => b.price!.compareTo(a.price!));
+     } else if (filter == 2) {
+       response.sort((a, b) => b.rating!.compareTo(a.rating!));
+     }
 
 
     emit(MobileListLoaded(data:response));
@@ -29,5 +38,8 @@ class MobileListCubit extends Cubit<MobileListState> {
 
   }
 
+  Future<void> refreshAfterAddingToFav() async {
+    getMobileList(prevFilter);
+  }
 
 }

@@ -21,14 +21,15 @@ class _HomePageState extends State<HomePage> {
         FavoriteListPage(),
       ];
 
-  int _filterValue = 0;
+  int _filterValue = -1;
+
 
   PageController _pageController = PageController(initialPage: 0);
   int _currentPageIndex = 0;
 
   @override
   void initState() {
-    BlocProvider.of<MobileListCubit>(context).getMobileList();
+    BlocProvider.of<MobileListCubit>(context).getMobileList(_filterValue);
     BlocProvider.of<MobileFvtCubit>(context).openDatabase();
     super.initState();
   }
@@ -103,6 +104,8 @@ class _HomePageState extends State<HomePage> {
                       setState((){
                         _filterValue=value!;
                       });
+                      BlocProvider.of<MobileListCubit>(context).getMobileList(value!);
+                      BlocProvider.of<MobileFvtCubit>(context).getAllFvtItems(value);
                     }),
                   ),
                 ],
@@ -114,6 +117,8 @@ class _HomePageState extends State<HomePage> {
                       setState((){
                         _filterValue=value!;
                       });
+                      BlocProvider.of<MobileListCubit>(context).getMobileList(value!);
+                      BlocProvider.of<MobileFvtCubit>(context).getAllFvtItems(value);
                     }),
                   ),
                 ],
@@ -125,6 +130,8 @@ class _HomePageState extends State<HomePage> {
                       setState((){
                         _filterValue=value!;
                       });
+                      BlocProvider.of<MobileListCubit>(context).getMobileList(value!);
+                      BlocProvider.of<MobileFvtCubit>(context).getAllFvtItems(value);
                     }),
                   ),
                 ],
